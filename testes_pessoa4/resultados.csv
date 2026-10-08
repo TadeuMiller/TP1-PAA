@@ -1,0 +1,17 @@
+teste,arquivo_entrada,resultado_esperado,modo,resultado_obtido,aprovado,chamadas_recursivas,nivel_maximo
+01_uma_chave,entradas/01_uma_chave.txt,com_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+01_uma_chave,entradas/01_uma_chave.txt,com_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+02_varias_chaves,entradas/02_varias_chaves.txt,com_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+02_varias_chaves,entradas/02_varias_chaves.txt,com_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+03_becos_sem_saida,entradas/03_becos_sem_saida.txt,com_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+03_becos_sem_saida,entradas/03_becos_sem_saida.txt,com_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+04_bau_inacessivel,entradas/04_bau_inacessivel.txt,sem_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+04_bau_inacessivel,entradas/04_bau_inacessivel.txt,sem_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+05_chave_inacessivel,entradas/05_chave_inacessivel.txt,sem_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+05_chave_inacessivel,entradas/05_chave_inacessivel.txt,sem_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+06_exige_repeticao,entradas/06_exige_repeticao.txt,sem_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+06_exige_repeticao,entradas/06_exige_repeticao.txt,sem_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+07_apenas_diagonal,entradas/07_apenas_diagonal.txt,sem_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+07_apenas_diagonal,entradas/07_apenas_diagonal.txt,sem_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+08_corredor_longo,entradas/08_corredor_longo.txt,com_solucao,normal,PENDENTE,PENDENTE,PENDENTE,PENDENTE
+08_corredor_longo,entradas/08_corredor_longo.txt,com_solucao,analise,PENDENTE,PENDENTE,PENDENTE,PENDENTE

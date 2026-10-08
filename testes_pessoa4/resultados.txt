@@ -1,0 +1,90 @@
+TESTES DA PESSOA 4 - VERSAO BASICA
+
+Comando para repetir:
+powershell -NoProfile -ExecutionPolicy Bypass -File .\testar.ps1
+Comando de compilacao no terminal: gcc -std=c99 -Wall -Wextra -Wpedantic -O0 -o verificador.exe verificador.c
+Uso manual: .\verificador.exe mapa.txt saida.txt com_solucao|sem_solucao
+Coordenadas [linha,coluna], a partir de zero; arquivos em UTF-8.
+Os exemplos_esperados sao respostas manuais. Qualquer caminho valido e aceito.
+
+RESULTADOS ESPERADOS DOS MAPAS
+entradas/01_uma_chave.txt | com_solucao | O corredor permite coletar a chave e chegar ao bau.
+entradas/02_varias_chaves.txt | com_solucao | Ha caminhos sem repeticao que coletam as tres chaves.
+entradas/03_becos_sem_saida.txt | com_solucao | A linha 1 leva ao bau; cima e baixo em [1,2] sao becos. O retorno depende da ordem de exploracao.
+entradas/04_bau_inacessivel.txt | sem_solucao | O bau esta isolado por paredes e pelas bordas.
+entradas/05_chave_inacessivel.txt | sem_solucao | O bau e alcancavel, mas uma linha de paredes isola a chave.
+entradas/06_exige_repeticao.txt | sem_solucao | Sair dos ramos com chaves exigiria repetir a sala [1,1].
+entradas/07_apenas_diagonal.txt | sem_solucao | A esta bloqueado nas quatro direcoes; a diagonal e proibida.
+entradas/08_corredor_longo.txt | com_solucao | As duas chaves ficam no corredor antes do bau. A recursao ainda precisa ser medida.
+
+PENDENCIAS DO PROGRAMA PRINCIPAL
+Ainda faltam leitor (pessoa 1), busca e contadores (pessoa 2), integracao e comandos (pessoa 3).
+Os comandos de entrada, execucao normal e ativacao da analise ainda nao foram fornecidos.
+No teste 03, conferir o abandono dos becos quando a ordem de movimentos estiver definida.
+
+PROBLEMA ENCONTRADO NO ENUNCIADO
+A saida do exemplo do mapa 10x10 (Figura 2) contradiz as regras escritas.
+Repete [2,3] a [2,6], [0,7] a [0,9] e [1,9] a [5,9]: aparecem duas vezes.
+Passa pelas paredes [1,7] e [8,9] e nao coleta a chave [8,0].
+O verificador rejeita no passo 26, em [2,3] (teste exemplo_do_enunciado).
+Arquivos em testes_verificador/: enunciado_mapa.txt e enunciado_saida.txt.
+Conferencia exaustiva separada: 6 caminhos validos; o menor tem 43 salas.
+Decisao: seguir as regras escritas: nao repetir sala, nao atravessar parede,
+coletar todas as chaves e confirmar com o professor.
+
+Teste | Modo | Esperado | Obtido | Status | Chamadas recursivas | Nivel maximo
+01_uma_chave | normal | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+01_uma_chave | analise | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+02_varias_chaves | normal | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+02_varias_chaves | analise | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+03_becos_sem_saida | normal | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+03_becos_sem_saida | analise | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+04_bau_inacessivel | normal | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+04_bau_inacessivel | analise | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+05_chave_inacessivel | normal | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+05_chave_inacessivel | analise | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+06_exige_repeticao | normal | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+06_exige_repeticao | analise | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+07_apenas_diagonal | normal | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+07_apenas_diagonal | analise | sem_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+08_corredor_longo | normal | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+08_corredor_longo | analise | com_solucao | PENDENTE | PENDENTE | PENDENTE | PENDENTE
+
+TESTES DO VERIFICADOR
+Respostas incorretas devem ser rejeitadas: codigo 1. Erros de arquivo/mapa: codigo 2.
+Codigo 0 aprova a resposta. O status abaixo indica se o teste do verificador passou.
+Teste | Codigo esperado | Codigo obtido | Status | Saida real
+01_uma_chave | 0 | 0 | APROVADO | APROVADO: caminho valido com 5 salas e 1 chaves.
+02_varias_chaves | 0 | 0 | APROVADO | APROVADO: caminho valido com 11 salas e 3 chaves.
+03_becos_sem_saida | 0 | 0 | APROVADO | APROVADO: caminho valido com 5 salas e 1 chaves.
+04_bau_inacessivel | 0 | 0 | APROVADO | APROVADO: mensagem de ausencia de solucao conferida.
+05_chave_inacessivel | 0 | 0 | APROVADO | APROVADO: mensagem de ausencia de solucao conferida.
+06_exige_repeticao | 0 | 0 | APROVADO | APROVADO: mensagem de ausencia de solucao conferida.
+07_apenas_diagonal | 0 | 0 | APROVADO | APROVADO: mensagem de ausencia de solucao conferida.
+08_corredor_longo | 0 | 0 | APROVADO | APROVADO: caminho valido com 20 salas e 2 chaves.
+alternativo | 0 | 0 | APROVADO | APROVADO: caminho valido com 11 salas e 3 chaves.
+linhas_separadas | 0 | 0 | APROVADO | APROVADO: caminho valido com 5 salas e 1 chaves.
+inicio_errado | 1 | 1 | APROVADO | FALHA: o caminho nao comeca em A.
+fim_errado | 1 | 1 | APROVADO | FALHA: o caminho nao termina em X.
+fora_do_mapa | 1 | 1 | APROVADO | FALHA: coordenada fora do mapa no passo 6.
+coordenada_negativa | 1 | 1 | APROVADO | FALHA: coordenada fora do mapa no passo 2.
+salto | 1 | 1 | APROVADO | FALHA: movimento invalido no passo 2.
+parede | 1 | 1 | APROVADO | FALHA: o caminho atravessa uma parede no passo 3.
+repeticao | 1 | 1 | APROVADO | FALHA: sala repetida no passo 4.
+diagonal | 1 | 1 | APROVADO | FALHA: movimento invalido no passo 2.
+faltam_chaves | 1 | 1 | APROVADO | FALHA: foram coletadas 1 de 3 chaves.
+falsa_ausencia | 1 | 1 | APROVADO | FALHA: era esperado um caminho, mas foi informada ausencia de solucao.
+mensagem_errada | 1 | 1 | APROVADO | FALHA: a mensagem exigida de ausencia de solucao nao apareceu.
+mensagem_e_caminho | 1 | 1 | APROVADO | FALHA: era esperado um caminho, mas foi informada ausencia de solucao.
+coordenada_malformada | 1 | 1 | APROVADO | FALHA: coordenada malformada. Use [linha,coluna].
+saida_vazia | 1 | 1 | APROVADO | FALHA: era esperado um caminho, mas ele nao foi apresentado.
+caminho_no_caso_sem_solucao | 1 | 1 | APROVADO | FALHA: a mensagem exigida de ausencia de solucao nao apareceu.
+mapa_com_chaves_erradas | 2 | 2 | APROVADO | ERRO: o mapa deve ter um A, um X e exatamente as chaves informadas.
+arquivo_saida_ausente | 2 | 2 | APROVADO | ERRO: nao foi possivel abrir a saida.
+exemplo_do_enunciado | 1 | 1 | APROVADO | FALHA: sala repetida no passo 26.
+cabecalho_incompleto | 2 | 2 | APROVADO | ERRO: cabecalho incompleto ou com valores invalidos.
+dimensoes_invalidas | 2 | 2 | APROVADO | ERRO: dimensoes devem estar entre 1 e 100.
+mapa_grande | 2 | 2 | APROVADO | ERRO: dimensoes devem estar entre 1 e 100.
+chaves_em_excesso | 2 | 2 | APROVADO | ERRO: quantidade de chaves invalida para as dimensoes do mapa.
+chaves_negativas | 2 | 2 | APROVADO | ERRO: quantidade de chaves invalida para as dimensoes do mapa.
+Total: 33; aprovados: 33; falhas: 0
