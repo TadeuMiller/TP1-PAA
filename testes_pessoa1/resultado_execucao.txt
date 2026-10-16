@@ -1,0 +1,25 @@
+[OK] testes/casos/exemplo_enunciado.txt             leitura aceita
+[OK] testes/casos/valido_espacos.txt                leitura aceita
+[OK] testes/casos/sem_chaves.txt                    leitura aceita
+[OK] testes/casos/sem_solucao.txt                   leitura aceita
+[OK] testes/casos/simbolo_invalido.txt              Simbolo invalido 'Z' na posicao [0,2].
+[OK] testes/casos/falta_bau.txt                     Mapa invalido: A=1 (esperado 1), X=0 (esperado 1), C=0 (esperado 0).
+[OK] testes/casos/falta_chave.txt                   Mapa invalido: A=1 (esperado 1), X=1 (esperado 1), C=0 (esperado 1).
+[OK] testes/casos/colunas_erradas.txt               Linha 0 tem mais de 3 colunas.
+[OK] testes/casos/duas_entradas.txt                 Mapa invalido: A=2 (esperado 1), X=1 (esperado 1), C=0 (esperado 0).
+[OK] testes/casos/linha_extra.txt                   Conteudo extra apos as 2 linhas do mapa.
+[OK] testes/casos/dimensao_invalida.txt             Primeira linha invalida: esperadas duas dimensoes positivas.
+[OK] testes/casos/mapa_incompleto.txt               Mapa incompleto: faltou a linha 2.
+[OK] testes/casos/nao_existe.txt                    Nao foi possivel abrir: testes/casos/nao_existe.txt
+
+Resultado: 13/13 testes aprovados.
+Mapa gerado: bin/gerado_com_solucao.txt (8x10, 3 chaves, 30 paredes, semente 42, com solucao garantida).
+Mapa gerado: bin/gerado_aleatorio.txt (5x5, 2 chaves, 5 paredes, semente 42, aleatorio sem garantia de solucao).
+[OK] Gerado bin/gerado_com_solucao.txt: 8x10, 3 chaves, 30 paredes.
+[OK] Corredor sem repeticao coletou 3/3 chaves ate o bau.
+[OK] Gerado bin/gerado_aleatorio.txt: 5x5, 2 chaves, 5 paredes.
+Mapa gerado: bin/com_solucao_uma_linha.txt (1x6, 3 chaves, 1 paredes, semente 5, com solucao garantida).
+[OK] Gerado bin/com_solucao_uma_linha.txt: 1x6, 3 chaves, 1 paredes.
+[OK] Corredor sem repeticao coletou 3/3 chaves ate o bau.
+
+Compilacao, testes e geracao de exemplos concluidos.
