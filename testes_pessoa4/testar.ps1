@@ -1,5 +1,5 @@
 # Executar: powershell -NoProfile -ExecutionPolicy Bypass -File .\testar.ps1
-# O script compila somente o verificador e grava resultados.txt e resultados.csv.
+# O script compila somente o verificador e grava resultados.txt.
 param([string]$Compilador = 'gcc')
 
 $ErrorActionPreference = 'Stop'
@@ -13,7 +13,13 @@ $mapas = @(
 @('05_chave_inacessivel', 'sem_solucao', 'O bau e alcancavel, mas uma linha de paredes isola a chave.'),
 @('06_exige_repeticao', 'sem_solucao', 'Sair dos ramos com chaves exigiria repetir a sala [1,1].'),
 @('07_apenas_diagonal', 'sem_solucao', 'A esta bloqueado nas quatro direcoes; a diagonal e proibida.'),
-@('08_corredor_longo', 'com_solucao', 'As duas chaves ficam no corredor antes do bau. A recursao ainda precisa ser medida.')
+@('08_corredor_longo', 'com_solucao', 'As duas chaves ficam no corredor antes do bau. A recursao ainda precisa ser medida.'),
+@('09_enunciado_10x10', 'com_solucao', 'Mapa da Figura 2 do enunciado: 6 caminhos validos, o menor com 43 salas.'),
+@('10_grade_aberta_sem_solucao', 'sem_solucao', 'Grade 5x5 aberta com bau isolado por paredes: obriga a explorar todas as alternativas.'),
+@('11_grade_aberta_com_solucao', 'com_solucao', 'Grade 5x5 aberta com 3 chaves: muitos caminhos validos (3757), util para o extra de todos os caminhos.'),
+@('12_minimo_sem_chaves', 'com_solucao', 'Caso minimo: mapa 1x2 sem chaves, A ao lado de X.'),
+@('13_serpente', 'com_solucao', 'Corredor em serpente 7x7 com 3 chaves: um unico caminho, de 31 salas, recursao profunda.'),
+@('14_grade_6x6_sem_solucao', 'sem_solucao', 'Grade 6x6 aberta com bau isolado: mostra o crescimento exponencial das chamadas em relacao ao mapa 10.')
 )
 
 # Nome, mapa, resposta de teste, tipo esperado, codigo esperado e mensagem.
@@ -47,6 +53,16 @@ $casos = @(
 @('mapa_com_chaves_erradas', 'testes_verificador/mapa_com_chaves_erradas.txt', 'exemplos_esperados/01_uma_chave.txt', 'com_solucao', '2', ''),
 @('arquivo_saida_ausente', 'entradas/01_uma_chave.txt', 'testes_verificador/arquivo_que_nao_existe.txt', 'com_solucao', '2', ''),
 @('exemplo_do_enunciado', 'testes_verificador/enunciado_mapa.txt', 'testes_verificador/enunciado_saida.txt', 'com_solucao', '1', ''),
+@('09_enunciado_10x10', 'entradas/09_enunciado_10x10.txt', 'exemplos_esperados/09_enunciado_10x10.txt', 'com_solucao', '0', ''),
+@('10_grade_aberta_sem_solucao', 'entradas/10_grade_aberta_sem_solucao.txt', 'exemplos_esperados/10_grade_aberta_sem_solucao.txt', 'sem_solucao', '0', ''),
+@('11_grade_aberta_com_solucao', 'entradas/11_grade_aberta_com_solucao.txt', 'exemplos_esperados/11_grade_aberta_com_solucao.txt', 'com_solucao', '0', ''),
+@('12_minimo_sem_chaves', 'entradas/12_minimo_sem_chaves.txt', 'exemplos_esperados/12_minimo_sem_chaves.txt', 'com_solucao', '0', ''),
+@('13_serpente', 'entradas/13_serpente.txt', 'exemplos_esperados/13_serpente.txt', 'com_solucao', '0', ''),
+@('14_grade_6x6_sem_solucao', 'entradas/14_grade_6x6_sem_solucao.txt', 'exemplos_esperados/14_grade_6x6_sem_solucao.txt', 'sem_solucao', '0', ''),
+@('globo_g01_aprovado', 'entradas_globo/g01_borda_horizontal.txt', 'exemplos_esperados/g01_borda_horizontal.txt', 'com_solucao', '0', '', 'globo'),
+@('globo_g02_aprovado', 'entradas_globo/g02_borda_vertical.txt', 'exemplos_esperados/g02_borda_vertical.txt', 'com_solucao', '0', '', 'globo'),
+@('globo_g03_sem_solucao', 'entradas_globo/g03_parede_na_borda.txt', 'exemplos_esperados/g03_parede_na_borda.txt', 'sem_solucao', '0', '', 'globo'),
+@('globo_g01_recusado_no_modo_normal', 'entradas_globo/g01_borda_horizontal.txt', 'exemplos_esperados/g01_borda_horizontal.txt', 'com_solucao', '1', 'FALHA: movimento invalido no passo 3.'),
 @('cabecalho_incompleto', 'testes_verificador/cabecalho_incompleto.txt', 'exemplos_esperados/01_uma_chave.txt', 'com_solucao', 2, 'ERRO: cabecalho incompleto ou com valores invalidos.'),
 @('dimensoes_invalidas', 'testes_verificador/dimensoes_invalidas.txt', 'exemplos_esperados/01_uma_chave.txt', 'com_solucao', 2, 'ERRO: dimensoes devem estar entre 1 e 100.'),
 @('mapa_grande', 'testes_verificador/mapa_grande.txt', 'exemplos_esperados/01_uma_chave.txt', 'com_solucao', 2, 'ERRO: dimensoes devem estar entre 1 e 100.'),
@@ -60,7 +76,7 @@ $registro = @(
     'Comando para repetir:',
     'powershell -NoProfile -ExecutionPolicy Bypass -File .\testar.ps1',
     ('Comando de compilacao no terminal: ' + (Split-Path -Leaf $Compilador) + ' -std=c99 -Wall -Wextra -Wpedantic -O0 -o verificador.exe verificador.c'),
-    'Uso manual: .\verificador.exe mapa.txt saida.txt com_solucao|sem_solucao',
+    'Uso manual: .\verificador.exe mapa.txt saida.txt com_solucao|sem_solucao [globo]',
     'Coordenadas [linha,coluna], a partir de zero; arquivos em UTF-8.',
     'Os exemplos_esperados sao respostas manuais. Qualquer caminho valido e aceito.',
     '',
@@ -110,15 +126,6 @@ $registro += @(
     'Teste | Codigo esperado | Codigo obtido | Status | Saida real'
 )
 
-# Tabela em CSV: execucoes do programa principal, ainda pendentes.
-$csv = @('teste,arquivo_entrada,resultado_esperado,modo,resultado_obtido,aprovado,chamadas_recursivas,nivel_maximo')
-foreach ($mapa in $mapas) {
-    foreach ($modo in @('normal', 'analise')) {
-        $csv += $mapa[0] + ',entradas/' + $mapa[0] + '.txt,' + $mapa[1] + ',' + $modo +
-            ',PENDENTE,PENDENTE,PENDENTE,PENDENTE'
-    }
-}
-
 $codigoScript = 2
 $gravar = $false
 Push-Location $PSScriptRoot
@@ -138,7 +145,9 @@ try {
     }
     $falhas = 0
     foreach ($caso in $casos) {
-        $saida = & .\verificador.exe $caso[1] $caso[2] $caso[3]
+        $opcional = @()
+        if ($caso.Count -gt 6) { $opcional = @($caso[6]) }
+        $saida = & .\verificador.exe $caso[1] $caso[2] $caso[3] @opcional
         $codigo = $LASTEXITCODE
         $mensagem = ($saida -join ' ').Trim()
         $passou = $codigo -eq [int]$caso[4]
@@ -172,7 +181,6 @@ try {
 } finally {
     if ($gravar) {
         Set-Content -LiteralPath (Join-Path $PSScriptRoot 'resultados.txt') -Value $registro -Encoding ASCII
-        Set-Content -LiteralPath (Join-Path $PSScriptRoot 'resultados.csv') -Value $csv -Encoding ASCII
     }
     Pop-Location
 }

@@ -9,6 +9,7 @@ typedef struct {
     int linhas;
     int colunas;
     int chaves;
+    int globo;
     char salas[LIMITE][LIMITE];
 } Mapa;
 
@@ -112,8 +113,6 @@ int lerCoordenada(FILE *arquivo, Posicao *posicao) {
 
 int conferirPasso(const Mapa *mapa, Posicao atual, Posicao anterior,
                   int passo, int visitadas[LIMITE][LIMITE]) {
-    int distancia;
-
     /* Conferir os limites antes de acessar a matriz. */
     if (atual.linha < 0 || atual.linha >= mapa->linhas ||
         atual.coluna < 0 || atual.coluna >= mapa->colunas) {
@@ -133,9 +132,14 @@ int conferirPasso(const Mapa *mapa, Posicao atual, Posicao anterior,
         return 0;
     }
     if (passo > 1) {
-        distancia = abs(atual.linha - anterior.linha) +
-                    abs(atual.coluna - anterior.coluna);
-        if (distancia != 1) {
+        int dl = abs(atual.linha - anterior.linha);
+        int dc = abs(atual.coluna - anterior.coluna);
+        /* No modo globo, as bordas opostas tambem sao vizinhas. */
+        int vertical = dc == 0 && (dl == 1 ||
+                       (mapa->globo && dl > 0 && dl == mapa->linhas - 1));
+        int horizontal = dl == 0 && (dc == 1 ||
+                         (mapa->globo && dc > 0 && dc == mapa->colunas - 1));
+        if (!vertical && !horizontal) {
             printf("FALHA: movimento invalido no passo %d.\n", passo);
             return 0;
         }
@@ -212,15 +216,19 @@ int main(int argc, char *argv[]) {
     FILE *saida;
     int esperaSolucao, aprovado;
 
-    if (argc != 4 || (strcmp(argv[3], "com_solucao") != 0 &&
-                      strcmp(argv[3], "sem_solucao") != 0)) {
-        printf("Uso: %s mapa.txt saida.txt com_solucao|sem_solucao\n", argv[0]);
+    if ((argc != 4 && argc != 5) ||
+        (strcmp(argv[3], "com_solucao") != 0 &&
+         strcmp(argv[3], "sem_solucao") != 0) ||
+        (argc == 5 && strcmp(argv[4], "globo") != 0)) {
+        printf("Uso: %s mapa.txt saida.txt com_solucao|sem_solucao [globo]\n",
+               argv[0]);
         return 2;
     }
     esperaSolucao = strcmp(argv[3], "com_solucao") == 0;
     if (!lerMapa(argv[1], &mapa)) {
         return 2;
     }
+    mapa.globo = (argc == 5);
     saida = fopen(argv[2], "r");
     if (saida == NULL) {
         printf("ERRO: nao foi possivel abrir a saida.\n");
